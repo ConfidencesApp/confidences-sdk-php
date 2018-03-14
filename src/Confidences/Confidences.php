@@ -3,7 +3,7 @@ namespace Confidences;
 
 class Confidences
 {
-    const VERSION = '1.0.1';
+    const VERSION = '1.0.2';
     
     // @var string The Confidences API key to be used for requests.
     public static $apiKey;

@@ -1,7 +1,7 @@
 {
   "name" : "confidencesapp/confidences-sdk-php",
   "description" : "Confidences SDK PHP",
-  "version" : "1.0.1",
+  "version" : "1.0.2",
   "require" : {
     "php" : "^5.6 || ^7.0 || ^7.1",
     "ext-curl": "*",
