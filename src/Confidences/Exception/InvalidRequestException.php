@@ -15,9 +15,6 @@ class InvalidRequestException extends BaseException
         $this->confidencesParam = $confidencesParam;
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
     public function getConfidencesParam()
     {
         return $this->confidencesParam;

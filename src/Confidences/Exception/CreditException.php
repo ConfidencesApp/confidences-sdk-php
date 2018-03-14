@@ -17,18 +17,12 @@ class CreditException extends BaseException
         $this->confidencesParam = $confidencesParam;
         $this->confidencesCode = $confidencesCode;
     }
-    
-    /**
-     * @codeCoverageIgnore
-     */
+
     public function getConfidencesCode()
     {
         return $this->confidencesCode;
     }
     
-    /**
-     * @codeCoverageIgnore
-     */
     public function getConfidencesParam()
     {
         return $this->confidencesParam;

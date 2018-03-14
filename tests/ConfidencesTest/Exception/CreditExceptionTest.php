@@ -12,13 +12,14 @@ class CreditExceptionTest extends TestCase
     public function testDecline()
     {
         Confidences::setVerifySslCerts(false);
-        
+
         try {
             $this->mockInsufficientCreditRequest();
             Survey::share($this->getMockCampaignToken(), $this->getMockRecipient(), $this->getMockMergeMap());
         } catch (Exception\CreditException $e) {
             $this->assertSame(402, $e->getHttpStatus());
             $this->assertSame(402, $e->getConfidencesCode());
+            $this->assertSame($this->getMockMergeMap(), $e->getConfidencesParam());
             $actual = $e->getJsonBody();
             $this->assertSame(
                 ['error' => [

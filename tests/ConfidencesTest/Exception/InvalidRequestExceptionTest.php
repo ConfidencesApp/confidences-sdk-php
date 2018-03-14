@@ -12,7 +12,7 @@ class InvalidRequestExceptionTest extends TestCase
     public function testInvalidObject()
     {
         Confidences::setVerifySslCerts(false);
-        
+
         try {
             $this->mockNotFoundCampaignRequest();
             Survey::share($this->getMockCampaignToken(), $this->getMockRecipient(), $this->getMockMergeMap());
@@ -24,12 +24,13 @@ class InvalidRequestExceptionTest extends TestCase
     public function testBadData()
     {
         Confidences::setVerifySslCerts(false);
-        
+
         try {
             $this->mockInvalidRecipientRequest();
             Survey::share($this->getMockCampaignToken(), $this->getMockRecipient(), $this->getMockMergeMap());
         } catch (Exception\InvalidRequestException $e) {
             $this->assertSame(400, $e->getHttpStatus());
+            $this->assertSame($this->getMockMergeMap(), $e->getConfidencesParam());
         }
     }
 }
