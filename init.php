@@ -18,6 +18,7 @@ require dirname(__FILE__) . '/src/Confidences/Exception/AuthenticationException.
 require dirname(__FILE__) . '/src/Confidences/Exception/AuthorizationException.php';
 require dirname(__FILE__) . '/src/Confidences/Exception/CreditException.php';
 require dirname(__FILE__) . '/src/Confidences/Exception/InvalidRequestException.php';
+require dirname(__FILE__) . '/src/Confidences/Exception/UniqueResponseException.php';
 
 // Plumbing
 require dirname(__FILE__) . '/src/Confidences/Api/ApiRequestor.php';
