@@ -33,17 +33,17 @@ class TestCase extends \PHPUnit_Framework_TestCase
         $this->mock = null;
         $this->call = 0;
     }
-    
+
     protected function getMockCampaignToken()
     {
         return 'campaignToken';
     }
-    
+
     protected function getMockRecipient()
     {
         return 'mobileOrEmail';
     }
-    
+
     protected function getMockMergeMap()
     {
         return [
@@ -51,7 +51,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
             'var2' => 'value2'
         ];
     }
-    
+
     protected function getMockRequestParams()
     {
         return [
@@ -66,7 +66,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
         $successObject = [
             'result' => 'sent'
         ];
-    
+
         return $this->mockRequest(
             'post',
             '/api/survey/share',
@@ -75,7 +75,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
             200
         );
     }
-    
+
     protected function mockInvalidRecipientRequest()
     {
         $errorObject = [
@@ -83,7 +83,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
             'message' => 'Bad request argument, check requested recipient.',
             'params' => $this->getMockRequestParams()
         ];
-    
+
         return $this->mockRequest(
             'post',
             '/api/survey/share',
@@ -92,7 +92,24 @@ class TestCase extends \PHPUnit_Framework_TestCase
             400
         );
     }
-    
+
+    protected function mockUniqueResponseRequest()
+    {
+        $errorObject = [
+            'code' => 422,
+            'message' => 'Unprocessable request, due to the unique response constraint.',
+            'params' => $this->getMockRequestParams()
+        ];
+
+        return $this->mockRequest(
+            'post',
+            '/api/survey/share',
+            $this->getMockRequestParams(),
+            ['error' => $errorObject],
+            422
+        );
+    }
+
     protected function mockUnauthenticatedRequest()
     {
         $errorObject = [
@@ -100,7 +117,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
             'message' => 'Access Denied.',
             'params' => $this->getMockRequestParams()
         ];
-    
+
         return $this->mockRequest(
             'post',
             '/api/survey/share',
@@ -117,7 +134,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
             'message' => 'Insufficient funds.',
             'params' => $this->getMockRequestParams()
         ];
-    
+
         return $this->mockRequest(
             'post',
             '/api/survey/share',
@@ -126,7 +143,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
             402
         );
     }
-    
+
     protected function mockUnauthorizeRequest()
     {
         $errorObject = [
@@ -134,7 +151,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
             'message' => 'You are unabled to use API survey share feature.',
             'params' => $this->getMockRequestParams()
         ];
-    
+
         return $this->mockRequest(
             'post',
             '/api/survey/share',
@@ -143,7 +160,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
             403
         );
     }
-    
+
     protected function mockNotFoundCampaignRequest()
     {
         $errorObject = [
@@ -151,7 +168,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
             'message' => 'Campaign not found.',
             'params' => $this->getMockRequestParams()
         ];
-    
+
         return $this->mockRequest(
             'post',
             '/api/survey/share',
@@ -160,7 +177,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
             404
         );
     }
-    
+
     protected function mockRequest($method, $path, $params = [], $return = ['id' => 'myId'], $rcode = 200)
     {
         $mock = $this->setUpMockRequest();

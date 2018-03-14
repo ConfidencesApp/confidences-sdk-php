@@ -99,11 +99,13 @@ class ApiRequestor
                 throw new Exception\CreditException($msg, $param, $code, $rcode, $rbody, $resp, $rheaders);
             case 403:
                 throw new Exception\AuthorizationException($msg, $rcode, $rbody, $resp, $rheaders);
+            case 422:
+                throw new Exception\UniqueResponseException($msg, $param, $rcode, $rbody, $resp, $rheaders);
             default:
                 throw new Exception\ApiException($msg, $rcode, $rbody, $resp, $rheaders);
         }
     }
-    
+
     private static function _formatAppInfo($appInfo)
     {
         if ($appInfo !== null) {
@@ -119,11 +121,11 @@ class ApiRequestor
             return null; // @codeCoverageIgnore
         }
     }
-    
+
     private static function _defaultHeaders($apiKey)
     {
         $uaString = 'Confidences/v1 PhpBindings/' . Confidences::VERSION;
-    
+
         $langVersion = phpversion();
         $uname = php_uname();
         $curlVersion = curl_version();
@@ -141,7 +143,7 @@ class ApiRequestor
             $uaString .= ' ' . self::_formatAppInfo($appInfo);
             $ua['application'] = $appInfo;
         }
-    
+
         $defaultHeaders = array(
             'X-Confidences-Client-User-Agent' => json_encode($ua),
             'User-Agent' => $uaString,
@@ -164,11 +166,11 @@ class ApiRequestor
                         . 'details, or email support@confidences.co if you have any questions.';
             throw new Exception\AuthenticationException($msg);
         }
-        
+
         $absUrl = $this->_apiBase.$url;
         $params = self::_encodeObjects($params);
         $defaultHeaders = $this->_defaultHeaders($myApiKey);
-        
+
         $hasFile = false;
         $hasCurlFile = class_exists('\CURLFile', false);
         foreach ($params as $k => $v) {
