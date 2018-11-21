@@ -17,8 +17,12 @@ class Survey
      * @param  array|null  $options
      * @return bool Returns true for a successful sending, false otherwise.
      */
-    public static function share(string $campaignToken, string $recipient, array $data = null, array $options = null) : bool
-    {
+    public static function share(
+        string $campaignToken,
+        string $recipient,
+        array $data = null,
+        array $options = null
+    ) : bool {
         self::$exception = null;
         
         if (!is_string($campaignToken) || empty($campaignToken)) {
