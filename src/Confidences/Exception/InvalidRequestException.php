@@ -10,12 +10,13 @@ class InvalidRequestException extends BaseException
 
     /**
      * InvalidRequestException constructor.
-     * @param string $message
-     * @param string $confidencesParam
-     * @param int|null $httpStatus
+     *
+     * @param string      $message
+     * @param string      $confidencesParam
+     * @param int|null    $httpStatus
      * @param null|string $httpBody
-     * @param mixed $jsonBody
-     * @param array|null $httpHeaders
+     * @param mixed       $jsonBody
+     * @param array|null  $httpHeaders
      */
     public function __construct(
         string $message,

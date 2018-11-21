@@ -9,14 +9,14 @@ class Survey
     private static $exception;
     
     /**
-    * Send the campaign to the specified recipient with optionnal extra data
-    *
-    * @param  string $campaignToken
-    * @param  string $recipient
-    * @param  array  $data
-    * @param  array  $options
-    * @return bool Returns true for a successful sending, false otherwise.
-    */
+     * Send the campaign to the specified recipient with optionnal extra data
+     *
+     * @param  string $campaignToken
+     * @param  string $recipient
+     * @param  array  $data
+     * @param  array  $options
+     * @return bool Returns true for a successful sending, false otherwise.
+     */
     public static function share(string $campaignToken, string $recipient, array $data = [], array $options = []) : bool
     {
         self::$exception = null;

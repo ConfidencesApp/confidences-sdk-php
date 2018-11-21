@@ -12,7 +12,7 @@ class ApiRequestorTest extends TestCase
     public function testEncodeObjects()
     {
         $reflector = new \ReflectionClass('Confidences\\Api\\ApiRequestor');
-        $method = $reflector->getMethod('_encodeObjects');
+        $method = $reflector->getMethod('encodeObjects');
         $method->setAccessible(true);
         
         // Preserves Boolean
@@ -53,7 +53,7 @@ class ApiRequestorTest extends TestCase
     public function testDefaultHeaders()
     {
         $reflector = new \ReflectionClass('Confidences\\Api\\ApiRequestor');
-        $method = $reflector->getMethod('_defaultHeaders');
+        $method = $reflector->getMethod('defaultHeaders');
         $method->setAccessible(true);
     
         // no way to stub static methods with PHPUnit 4.x :(

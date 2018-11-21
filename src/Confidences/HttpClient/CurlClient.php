@@ -59,7 +59,7 @@ class CurlClient implements ClientInterface
     private $connectTimeout = self::DEFAULT_CONNECT_TIMEOUT;
 
     /**
-     * @param int $seconds
+     * @param  int $seconds
      * @return self
      */
     public function setTimeout(int $seconds) : self
@@ -69,7 +69,7 @@ class CurlClient implements ClientInterface
     }
 
     /**
-     * @param $seconds
+     * @param  $seconds
      * @return self
      */
     public function setConnectTimeout($seconds) : self
@@ -97,11 +97,11 @@ class CurlClient implements ClientInterface
     // END OF USER DEFINED TIMEOUTS
 
     /**
-     * @param string $method
-     * @param string $absUrl
-     * @param array $headers
-     * @param array $params
-     * @param bool $hasFile
+     * @param  string $method
+     * @param  string $absUrl
+     * @param  array  $headers
+     * @param  array  $params
+     * @param  bool   $hasFile
      * @return array
      * @throws Exception\ApiConnectionException
      * @throws Exception\ApiException
@@ -217,10 +217,10 @@ class CurlClient implements ClientInterface
     }
 
     /**
-     * @param $url
-     * @param $errno
-     * @param $message
-     * @throws Exception\ApiConnectionException
+     * @param              $url
+     * @param              $errno
+     * @param              $message
+     * @throws             Exception\ApiConnectionException
      * @codeCoverageIgnore
      */
     private function handleCurlError($url, $errno, $message) : void
@@ -258,7 +258,7 @@ class CurlClient implements ClientInterface
     }
 
     /**
-     * @param array|mixed $arr  An map of param keys to values.
+     * @param array|mixed $arr    An map of param keys to values.
      * @param string|null $prefix
      *
      * Only public for testability, should not be called outside of CurlClient

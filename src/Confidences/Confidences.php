@@ -82,9 +82,9 @@ class Confidences
     }
     
     /**
-     * @param string $appName The application's name
+     * @param string $appName    The application's name
      * @param string $appVersion The application's version
-     * @param string $appUrl The application's URL
+     * @param string $appUrl     The application's URL
      */
     public static function setAppInfo(string $appName, ?string $appVersion = null, ?string $appUrl = null) : void
     {

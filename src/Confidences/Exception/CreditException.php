@@ -16,17 +16,18 @@ class CreditException extends BaseException
 
     /**
      * CreditException constructor.
-     * @param string $message
+     *
+     * @param string      $message
      * @param string|null $confidencesParam
-     * @param string $confidencesCode
-     * @param int $httpStatus
-     * @param string $httpBody
-     * @param mixed $jsonBody
-     * @param array|null $httpHeaders
+     * @param string      $confidencesCode
+     * @param int         $httpStatus
+     * @param string      $httpBody
+     * @param mixed       $jsonBody
+     * @param array|null  $httpHeaders
      */
     public function __construct(
         string $message,
-        ?string $confidencesParam = null,
+        string $confidencesParam = null,
         string $confidencesCode,
         int $httpStatus,
         string $httpBody,

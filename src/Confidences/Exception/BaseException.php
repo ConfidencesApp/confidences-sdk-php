@@ -32,11 +32,12 @@ abstract class BaseException extends Exception
 
     /**
      * BaseException constructor.
-     * @param string $message
-     * @param int|null $httpStatus
+     *
+     * @param string      $message
+     * @param int|null    $httpStatus
      * @param null|string $httpBody
-     * @param mixed $jsonBody
-     * @param array|null $httpHeaders
+     * @param mixed       $jsonBody
+     * @param array|null  $httpHeaders
      */
     public function __construct(
         string $message,
@@ -98,7 +99,7 @@ abstract class BaseException extends Exception
     }
 
     /**
-     * @return string
+     * @return             string
      * @codeCoverageIgnore
      */
     public function __toString() : string
