@@ -9,13 +9,27 @@ use Confidences\Util;
 
 class ApiRequestor
 {
+    /**
+     * @var null|string
+     */
     private $_apiKey;
 
+    /**
+     * @var null|string
+     */
     private $_apiBase;
 
+    /**
+     * @var null|HttpClient\CurlClient
+     */
     private static $_httpClient;
 
-    public function __construct($apiKey = null, $apiBase = null)
+    /**
+     * ApiRequestor constructor.
+     * @param string $apiKey
+     * @param string $apiBase
+     */
+    public function __construct(?string $apiKey = null, ?string $apiBase = null)
     {
         $this->_apiKey = $apiKey;
         if (!$apiBase) {
@@ -24,6 +38,10 @@ class ApiRequestor
         $this->_apiBase = $apiBase;
     }
 
+    /**
+     * @param $d
+     * @return array|mixed|string
+     */
     private static function _encodeObjects($d)
     {
         if ($d === true) {
@@ -42,41 +60,38 @@ class ApiRequestor
     }
 
     /**
-     * @param string     $method
-     * @param string     $url
+     * @param $method
+     * @param $url
      * @param array|null $params
      * @param array|null $headers
-     *
-     * @return array An array whose first element is an API response and second
-     *    element is the API key used to make the request.
+     * @return ApiResponse
+     * @throws Exception\ApiException
+     * @throws Exception\AuthenticationException
+     * @throws Exception\AuthorizationException
+     * @throws Exception\CreditException
+     * @throws Exception\InvalidRequestException
+     * @throws Exception\UniqueResponseException
      */
-    public function request($method, $url, $params = null, $headers = null)
+    public function request(string $method, string $url, ?array $params = [], ?array $headers = [])
     {
-        if (!$params) {
-            $params = [];
-        }
-        if (!$headers) {
-            $headers = [];
-        }
         list($rbody, $rcode, $rheaders) = $this->_requestRaw($method, $url, $params, $headers);
         $json = $this->_interpretResponse($rbody, $rcode, $rheaders);
         return new ApiResponse($rbody, $rcode, $rheaders, $json);
     }
 
     /**
-     * @param string $rbody    A JSON string.
-     * @param int    $rcode
-     * @param array  $rheaders
-     * @param array  $resp
-     *
-     * @throws Exception\InvalidRequestException if the error is caused by the user.
-     * @throws Exception\AuthenticationException if the error is caused by a lack of
-     *    permissions.
-     * @throws Exception\AuthorizationException if the error is caused by a lack of
-     *    permissions.
-     * @throws Exception\ApiException otherwise.
+     * @param string $rbody A JSON string.
+     * @param int $rcode
+     * @param array $rheaders
+     * @param mixed $resp
+     * @throws Exception\ApiException
+     * @throws Exception\AuthenticationException
+     * @throws Exception\AuthorizationException
+     * @throws Exception\CreditException
+     * @throws Exception\InvalidRequestException
+     * @throws Exception\UniqueResponseException
      */
-    public function handleApiError($rbody, $rcode, $rheaders, $resp)
+    public function handleApiError(string $rbody, int $rcode, array $rheaders, $resp)
     {
         if (!is_array($resp) || !isset($resp['error'])) {
             $msg = "Invalid response object from API: $rbody "
@@ -85,7 +100,7 @@ class ApiRequestor
         }
 
         $error = $resp['error'];
-        $msg = isset($error['message']) ? $error['message'] : null;
+        $msg = isset($error['message']) ? $error['message'] : 'no error message returned';
         $param = isset($error['param']) ? $error['param'] : null;
         $code = isset($error['code']) ? $error['code'] : null;
 
@@ -106,7 +121,11 @@ class ApiRequestor
         }
     }
 
-    private static function _formatAppInfo($appInfo)
+    /**
+     * @param $appInfo
+     * @return null|string
+     */
+    private static function _formatAppInfo($appInfo) : ?string
     {
         if ($appInfo !== null) {
             $string = $appInfo['name'];
@@ -122,7 +141,11 @@ class ApiRequestor
         }
     }
 
-    private static function _defaultHeaders($apiKey)
+    /**
+     * @param $apiKey
+     * @return array
+     */
+    private static function _defaultHeaders($apiKey) : array
     {
         $uaString = 'Confidences/v1 PhpBindings/' . Confidences::VERSION;
 
@@ -130,7 +153,7 @@ class ApiRequestor
         $uname = php_uname();
         $curlVersion = curl_version();
         $appInfo = Confidences::getAppInfo();
-        $ua = array(
+        $ua = [
             'bindings_version' => Confidences::VERSION,
             'lang' => 'php',
             'lang_version' => $langVersion,
@@ -138,21 +161,31 @@ class ApiRequestor
             'uname' => $uname,
             'httplib' => 'curl ' . $curlVersion['version'],
             'ssllib' => $curlVersion['ssl_version'],
-        );
+        ];
         if ($appInfo !== null) {
             $uaString .= ' ' . self::_formatAppInfo($appInfo);
             $ua['application'] = $appInfo;
         }
 
-        $defaultHeaders = array(
+        $defaultHeaders = [
             'X-Confidences-Client-User-Agent' => json_encode($ua),
             'User-Agent' => $uaString,
             'Authorization' => 'Bearer ' . $apiKey,
-        );
+        ];
         return $defaultHeaders;
     }
 
-    private function _requestRaw($method, $url, $params, $headers)
+    /**
+     * @param string $method
+     * @param string $url
+     * @param array $params
+     * @param array $headers
+     * @return array
+     * @throws Exception\ApiConnectionException
+     * @throws Exception\ApiException
+     * @throws Exception\AuthenticationException
+     */
+    private function _requestRaw(string $method, string $url, array $params, array $headers)
     {
         $myApiKey = $this->_apiKey;
         if (!$myApiKey) {
@@ -206,6 +239,10 @@ class ApiRequestor
     }
 
     /**
+     * @param $resource
+     * @param $hasCurlFile
+     * @return \CURLFile|string
+     * @throws Exception\ApiException
      * @codeCoverageIgnore
      */
     private function _processResourceParam($resource, $hasCurlFile)
@@ -231,6 +268,18 @@ class ApiRequestor
         }
     }
 
+    /**
+     * @param $rbody
+     * @param $rcode
+     * @param $rheaders
+     * @return mixed
+     * @throws Exception\ApiException
+     * @throws Exception\AuthenticationException
+     * @throws Exception\AuthorizationException
+     * @throws Exception\CreditException
+     * @throws Exception\InvalidRequestException
+     * @throws Exception\UniqueResponseException
+     */
     private function _interpretResponse($rbody, $rcode, $rheaders)
     {
         try {
@@ -246,15 +295,22 @@ class ApiRequestor
         if ($rcode < 200 || $rcode >= 300) {
             $this->handleApiError($rbody, $rcode, $rheaders, $resp);
         }
+
         return $resp;
     }
 
-    public static function setHttpClient($client)
+    /**
+     * @param $client
+     */
+    public static function setHttpClient($client) : void
     {
         self::$_httpClient = $client;
     }
 
-    private function httpClient()
+    /**
+     * @return HttpClient\ClientInterface
+     */
+    private function httpClient() : HttpClient\ClientInterface
     {
         if (!self::$_httpClient) {
             self::$_httpClient = HttpClient\CurlClient::instance(); // @codeCoverageIgnore

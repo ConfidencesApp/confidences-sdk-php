@@ -57,7 +57,8 @@ class TestCase extends \PHPUnit_Framework_TestCase
         return [
             'recipient' => $this->getMockRecipient(),
             'campaign_token' => $this->getMockCampaignToken(),
-            'merge_map' => $this->getMockMergeMap()
+            'merge_map' => $this->getMockMergeMap(),
+            'options' => []
         ];
     }
 

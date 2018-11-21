@@ -4,23 +4,31 @@ namespace Confidences;
 class Confidences
 {
     const VERSION = '1.0.2';
-    
-    // @var string The Confidences API key to be used for requests.
-    public static $apiKey;
-    
-    // @var string The base URL for the Confidences API.
+
+    /**
+     * @var string|null The Confidences API key to be used for requests.
+     */
+    public static $apiKey = null;
+
+    /**
+     * @var string The base URL for the Confidences API.
+     */
     public static $apiBase = 'https://api.confidences.co/api';
 
-    // @var boolean Defaults to true.
+    /**
+     * @var bool Defaults to true.
+     */
     public static $verifySslCerts = true;
 
-    // @var array The application's information (name, version, URL)
+    /**
+     * @var array|null The application's information (name, version, URL)
+     */
     public static $appInfo = null;
     
     /**
-     * @return string $apiKey
+     * @return string|null $apiKey
      */
-    public static function getApiKey()
+    public static function getApiKey() : ?string
     {
         return self::$apiKey;
     }
@@ -28,15 +36,15 @@ class Confidences
     /**
      * @param string $apiKey
      */
-    public static function setApiKey($apiKey)
+    public static function setApiKey($apiKey) : void
     {
         self::$apiKey = $apiKey;
     }
     
     /**
-     * @return string $apiBase
+     * @return string|null $apiBase
      */
-    public static function getApiBase()
+    public static function getApiBase() : ?string
     {
         return self::$apiBase;
     }
@@ -44,7 +52,7 @@ class Confidences
     /**
      * @param string $apiBase
      */
-    public static function setApiBase($apiBase)
+    public static function setApiBase($apiBase) : void
     {
         self::$apiBase = $apiBase;
     }
@@ -52,7 +60,7 @@ class Confidences
     /**
      * @return boolean $verifySslCerts
      */
-    public static function getVerifySslCerts()
+    public static function getVerifySslCerts() : bool
     {
         return self::$verifySslCerts;
     }
@@ -60,15 +68,15 @@ class Confidences
     /**
      * @param boolean $verifySslCerts
      */
-    public static function setVerifySslCerts($verifySslCerts)
+    public static function setVerifySslCerts($verifySslCerts) : void
     {
         self::$verifySslCerts = $verifySslCerts;
     }
 
     /**
-     * @return array | null The application's information
+     * @return array|null The application's information
      */
-    public static function getAppInfo()
+    public static function getAppInfo() : ?array
     {
         return self::$appInfo;
     }
@@ -78,10 +86,10 @@ class Confidences
      * @param string $appVersion The application's version
      * @param string $appUrl The application's URL
      */
-    public static function setAppInfo($appName, $appVersion = null, $appUrl = null)
+    public static function setAppInfo(string $appName, ?string $appVersion = null, ?string $appUrl = null) : void
     {
         if (self::$appInfo === null) {
-            self::$appInfo = array();
+            self::$appInfo = [];
         }
         self::$appInfo['name'] = $appName;
         self::$appInfo['version'] = $appVersion;

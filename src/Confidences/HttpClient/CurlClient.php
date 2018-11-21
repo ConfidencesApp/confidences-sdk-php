@@ -48,23 +48,31 @@ class CurlClient implements ClientInterface
     const DEFAULT_TIMEOUT = 80;
     const DEFAULT_CONNECT_TIMEOUT = 30;
 
+    /**
+     * @var int
+     */
     private $timeout = self::DEFAULT_TIMEOUT;
+
+    /**
+     * @var int
+     */
     private $connectTimeout = self::DEFAULT_CONNECT_TIMEOUT;
-    
 
     /**
      * @param int $seconds
+     * @return self
      */
-    public function setTimeout($seconds)
+    public function setTimeout(int $seconds) : self
     {
         $this->timeout = (int) max($seconds, 0);
         return $this;
     }
 
     /**
-     * @param int $seconds
+     * @param $seconds
+     * @return self
      */
-    public function setConnectTimeout($seconds)
+    public function setConnectTimeout($seconds) : self
     {
         $this->connectTimeout = (int) max($seconds, 0);
         return $this;
@@ -73,7 +81,7 @@ class CurlClient implements ClientInterface
     /**
      * @return int
      */
-    public function getTimeout()
+    public function getTimeout() : int
     {
         return $this->timeout;
     }
@@ -81,14 +89,24 @@ class CurlClient implements ClientInterface
     /**
      * @return int
      */
-    public function getConnectTimeout()
+    public function getConnectTimeout() : int
     {
         return $this->connectTimeout;
     }
 
     // END OF USER DEFINED TIMEOUTS
 
-    public function request($method, $absUrl, $headers, $params, $hasFile)
+    /**
+     * @param string $method
+     * @param string $absUrl
+     * @param array $headers
+     * @param array $params
+     * @param bool $hasFile
+     * @return array
+     * @throws Exception\ApiConnectionException
+     * @throws Exception\ApiException
+     */
+    public function request(string $method, string $absUrl, array $headers, array $params, bool $hasFile) : array
     {
         $curl = curl_init();
         $method = strtolower($method);
@@ -199,12 +217,13 @@ class CurlClient implements ClientInterface
     }
 
     /**
-     * @param number $errno
-     * @param string $message
-     * @throws Exception\ApiConnection
+     * @param $url
+     * @param $errno
+     * @param $message
+     * @throws Exception\ApiConnectionException
      * @codeCoverageIgnore
      */
-    private function handleCurlError($url, $errno, $message)
+    private function handleCurlError($url, $errno, $message) : void
     {
         switch ($errno) {
             case CURLE_COULDNT_CONNECT:
@@ -230,20 +249,23 @@ class CurlClient implements ClientInterface
         throw new Exception\ApiConnectionException($msg);
     }
 
-    private static function caBundle()
+    /**
+     * @return string
+     */
+    private static function caBundle() : string
     {
         return dirname(__FILE__) . '/../../../data/ca-certificates.crt';
     }
 
     /**
-     * @param array       $arr    An map of param keys to values.
+     * @param array|mixed $arr  An map of param keys to values.
      * @param string|null $prefix
      *
      * Only public for testability, should not be called outside of CurlClient
      *
      * @return string A querystring, essentially.
      */
-    public static function encode($arr, $prefix = null)
+    public static function encode($arr, ?string $prefix = null)
     {
         if (!is_array($arr)) {
             return $arr;

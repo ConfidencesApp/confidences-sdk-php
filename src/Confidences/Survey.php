@@ -14,9 +14,10 @@ class Survey
     * @param  string $campaignToken
     * @param  string $recipient
     * @param  array  $data
-    * @return boolean Returns true for a successful sending, false otherwise.
+    * @param  array  $options
+    * @return bool Returns true for a successful sending, false otherwise.
     */
-    public static function share($campaignToken, $recipient, $data = [])
+    public static function share(string $campaignToken, string $recipient, array $data = [], array $options = []) : bool
     {
         self::$exception = null;
         
@@ -31,7 +32,8 @@ class Survey
         $params = [
             'recipient' => $recipient,
             'campaign_token' => $campaignToken,
-            'merge_map' => $data
+            'merge_map' => $data,
+            'options' => $options
         ];
         
         try {
@@ -49,9 +51,9 @@ class Survey
     }
     
     /**
-     * @return BaseException $exception
+     * @return BaseException|null $exception
      */
-    public static function getException()
+    public static function getException() : ?BaseException
     {
         return self::$exception;
     }

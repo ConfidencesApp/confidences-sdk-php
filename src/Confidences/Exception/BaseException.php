@@ -5,12 +5,45 @@ use Exception;
 
 abstract class BaseException extends Exception
 {
+    /**
+     * @var int|null
+     */
+    protected $httpStatus;
+
+    /**
+     * @var null|string
+     */
+    protected $httpBody;
+
+    /**
+     * @var mixed
+     */
+    protected $jsonBody;
+
+    /**
+     * @var array|null
+     */
+    protected $httpHeaders;
+
+    /**
+     * @var string|null
+     */
+    protected $requestId;
+
+    /**
+     * BaseException constructor.
+     * @param string $message
+     * @param int|null $httpStatus
+     * @param null|string $httpBody
+     * @param mixed $jsonBody
+     * @param array|null $httpHeaders
+     */
     public function __construct(
-        $message,
-        $httpStatus = null,
-        $httpBody = null,
+        string $message,
+        ?int $httpStatus = null,
+        ?string $httpBody = null,
         $jsonBody = null,
-        $httpHeaders = null
+        ?array $httpHeaders = null
     ) {
         parent::__construct($message);
         $this->httpStatus = $httpStatus;
@@ -24,35 +57,51 @@ abstract class BaseException extends Exception
         }
     }
 
-    public function getHttpStatus()
+    /**
+     * @return int|null
+     */
+    public function getHttpStatus() : ?int
     {
         return $this->httpStatus;
     }
 
-    public function getHttpBody()
+    /**
+     * @return null|string
+     */
+    public function getHttpBody() : ?string
     {
         return $this->httpBody;
     }
 
+    /**
+     * @return mixed|null
+     */
     public function getJsonBody()
     {
         return $this->jsonBody;
     }
 
-    public function getHttpHeaders()
+    /**
+     * @return array|null
+     */
+    public function getHttpHeaders() : ?array
     {
         return $this->httpHeaders;
     }
 
-    public function getRequestId()
+    /**
+     * @return null|string
+     */
+    public function getRequestId() : ?string
     {
         return $this->requestId;
     }
 
     /**
+     * @return string
      * @codeCoverageIgnore
      */
-    public function __toString()
+    public function __toString() : string
     {
         $id = $this->requestId ? " from API request '{$this->requestId}'": "";
         $message = explode("\n", parent::__toString());
