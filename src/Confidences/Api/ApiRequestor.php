@@ -74,8 +74,14 @@ class ApiRequestor
      * @throws Exception\InvalidRequestException
      * @throws Exception\UniqueResponseException
      */
-    public function request(string $method, string $url, ?array $params = [], ?array $headers = [])
+    public function request(string $method, string $url, ?array $params = null, ?array $headers = null)
     {
+        if ($params === null) {
+            $params = [];
+        }
+        if ($headers === null) {
+            $headers = [];
+        }
         list($rbody, $rcode, $rheaders) = $this->requestRaw($method, $url, $params, $headers);
         $json = $this->interpretResponse($rbody, $rcode, $rheaders);
         return new ApiResponse($rbody, $rcode, $rheaders, $json);
